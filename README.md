@@ -126,6 +126,7 @@ For the single variable analysis, I wanted to explore ratio of holiday to non-ho
   height="600"
   frameborder="0"
 ></iframe>
+
 It appears that there are far more non-holiday recipes than holiday ones, which will make our future analysis a little challenging. 
 
 <iframe
@@ -134,6 +135,9 @@ It appears that there are far more non-holiday recipes than holiday ones, which 
   height="600"
   frameborder="0"
 ></iframe>
+
+
+
 In looking at the shape of the sugar (PDV), it is skewed right with a fairly even log-scaled distribution which will be useful for training models in the future.
 
 ### Bivariate Analysis
