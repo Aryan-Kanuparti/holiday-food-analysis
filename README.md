@@ -129,6 +129,7 @@ For the single variable analysis, I wanted to explore ratio of holiday to non-ho
 
 It appears that there are far more non-holiday recipes than holiday ones, which will make our future analysis a little challenging. 
 
+
 <iframe
   src="assets/log_scaled_histogram_sugar.html"
   width="800"
@@ -142,7 +143,29 @@ In looking at the shape of the sugar (PDV), it is skewed right with a fairly eve
 
 ### Bivariate Analysis
 
-For the bivariate analysis, I wanted to 
+For the bivariate analysis, I wanted to study the relationship between sugar and fat becasue I believe that recipes with more of both of these are likely unhealthy and thus taste good enough to garner higher ratings.
+
+
+<iframe
+  src="assets/scatter_sugar_vs_fat.html"
+  width="800"
+  height="600"
+  frameborder="0"
+></iframe>
+
+It appears that there isnt any strong noticable trend, other than most of the values being smaller rather than larger, with some relatively massive outliers for both sugar and fat
+
+
+
+Furthermore, to ties this back into the holiday food question, I wanted to determine some baseline information like the mean sugar (PDV) in holiday and non-holiday foods.
+
+<iframe
+  src="assets/mean_sugar_by_season.html"
+  width="800"
+  height="600"
+  frameborder="0"
+></iframe>
+
 
 
 
