@@ -32,7 +32,7 @@ The primary dataset, `recipes`, contains 83782 rows -- 83782 unique recipes -- w
 | `'ingredients'`    | Text for recipe ingredients                                                                                                                                                                       |
 | `'n_ingredients'`  | Number of ingredients in recipe                                                                                                                                                                   |
 
-The second dataset, `interactions`, contains 731927 rows with each one representing one review that a user left on a speciic recipe. Each recipe could have multiple interactions and reviews. The columns it includes are:
+The second dataset, `interactions`, contains 731927 rows with each one representing one review that a user left on a specific recipe. Each recipe could have multiple interactions and reviews. The columns it includes are:
 
 | Column        | Description         |
 | :------------ | :------------------ |
@@ -146,6 +146,13 @@ Our cleaned dataframe ended up with 234429 rows and 27 columns. Here are the fir
 
 
 ### Univariate Analysis
+
+<iframe
+  src="assets/holiday_season_distribution.html"
+  width="800"
+  height="600"
+  frameborder="0"
+></iframe>
 
 ### Bivariate Analysis
 
