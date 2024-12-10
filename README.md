@@ -11,7 +11,7 @@ Authors: Aryan Kanuparti
 
 In most cultures, the holidays are a time to be grateful for what we have, cherish moments with family and friends, and, perhaps most importantly, enjoy delicious food. Holiday dishes often carry special significance, with recipes passed down through generations or designed to capture the festive spirit. However, the indulgent nature of holiday foods raises intriguing questions about their nutritional value and popularity. Do holiday recipes, often laden with sugar and fats, receive higher ratings simply due to the nostalgia and festive atmosphere, or do health-conscious individuals rate them lower because of their nutritional content?
 
-This data science project, conducted at UCSD, investigates the relationship between a recipe's holiday food status—determined by whether it was posted between October and December—and its ratings and nutritional values. By analyzing datasets containing recipes and ratings posted on food.com since 2008, originally curated for the research paper Generating Personalized Recipes from Historical User Preferences by Majumder et al., we aim to uncover trends that reveal how the festive season influences culinary preferences and perceptions.
+This data science project, conducted at UCSD, investigates the relationship between a recipe's holiday food status—determined by whether it was posted between October and December—and its ratings and nutritional values. By analyzing datasets containing recipes and ratings posted on food.com since 2008, I aim to uncover trends that reveal how the festive season influences culinary preferences and perceptions.
 
 
 
@@ -52,38 +52,12 @@ I followed this outline to clean and explore my data before getting into my test
 
 1. Left merge the recipes and interactions datasets on id and recipe_id.
 
-   - This step helps match the unique recipes with their rating and review.
-
-1. Check data types of all the columns.
-
-   - This step helps us evaluate what data cleaning steps are appropriate for the dataset and if we need to conduct data type conversion.
-   - | Column             | Description |
-     | :----------------- | :---------- |
-     | `'name'`           | object      |
-     | `'id'`             | int64       |
-     | `'minutes'`        | int64       |
-     | `'contributor_id'` | int64       |
-     | `'submitted'`      | object      |
-     | `'tags'`           | object      |
-     | `'nutrition'`      | object      |
-     | `'n_steps'`        | int64       |
-     | `'steps'`          | object      |
-     | `'description'`    | object      |
-     | `'ingredients'`    | object      |
-     | `'n_ingredients'`  | int64       |
-     | `'user_id'`        | float64     |
-     | `'recipe_id'`      | float64     |
-     | `'date'`           | object      |
-     | `'rating'`         | float64     |
-     | `'review'`         | object      |
-
 1. Fill all ratings of 0 with np.nan.
 
-   - Rating is generally on a scale from 1 to 5, 1 meaning the lowest rating while 5 means the highest rating. With that being said, a rating of 0 indicates missing values in rating. Thus, to avoid bias in the ratings, we filled the value 0 with np.nan.
-
+   - Ratings in this dataset range from from 1 to 5. 1 being the lowest rating and 5 being highest rating. Furthermore a rating of 0 does not really make sense with this scale, so to minmize bias I am going to fill all the 0 ratings with null values.
 1. Add column `'average_rating'` containing average rating per recipe.
 
-   - Since a recipe can have numerous ratings from different users, we take an average of all the ratings to get a more comprehensive understanding of the rating of a given recipe.
+   - Since each recipe could potentially hae multiple rating from different users, aggregating all the ratings will help ii analyzing the trends associated with the rating of eah recipe.
 
 1. Split values in the nutrition column to individual columns of floats.
 
