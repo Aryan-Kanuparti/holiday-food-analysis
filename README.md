@@ -55,7 +55,7 @@ I followed this outline to clean and explore my data before getting into my test
 1. Fill all ratings of 0 with np.nan.
 
    - Ratings in this dataset range from from 1 to 5. 1 being the lowest rating and 5 being highest rating. Furthermore a rating of 0 does not really make sense with this scale, so to minmize bias I am going to fill all the 0 ratings with null values.
-1. Add column `'average_rating'` containing average rating per recipe.
+1. Add column `'rating_avg'` containing average rating per recipe.
 
    - Since each recipe could potentially hae multiple rating from different users, aggregating all the ratings will help ii analyzing the trends associated with the rating of eah recipe.
 
