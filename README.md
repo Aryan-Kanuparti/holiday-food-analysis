@@ -119,15 +119,26 @@ My cleaned dataframe ended with 234429 rows and 23 columns. Here are the first 5
 | 412 broccoli casserole               | 306168 |            5 |          194.8 |                20 |             6 | False               |
 
 ### Univariate Analysis
-
+For the single variable analysis, I wanted to explore ratio of holiday to non-holiday foods as well as the general shape of the distribution for some of the more pivotal nutrition columns 
 <iframe
   src="assets/holiday_season_distribution.html"
   width="800"
   height="600"
   frameborder="0"
 ></iframe>
+It appears that there are far more non-holiday recipes than holiday ones, which will make our future analysis a little challenging. 
+
+<iframe
+  src="assets/log_scaled_histogram_sugar.html"
+  width="800"
+  height="600"
+  frameborder="0"
+></iframe>
+In looking at the shape of the sugar (PDV), it is skewed right with a fairly even log-scaled distribution which will be useful for training models in the future.
 
 ### Bivariate Analysis
+
+For the bivariate analysis, I wanted to 
 
 
 
