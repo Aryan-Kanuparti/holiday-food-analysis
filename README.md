@@ -42,7 +42,7 @@ The second dataset, `interactions`, contains 731927 rows with each one represent
 | `'review'`    | Review text         |
 
 
-**Given the datasets, I am investigating whether people rate holiday recipes and non-holiday recipes similarly.** To answer this  question, I identified recipes submitted during the holiday season (October to December) and created a new column, 'is_holiday_season', to indicate whether a recipe falls into this category. Additionally, I extracted values from the 'nutrition' column into separate columns such as 'calories (#)', 'total fat (PDV)', 'sugar (PDV)', and others. 
+**Given the datasets, I am investigating whether people rate holiday recipes and non-holiday recipes similarly.** To answer this question, I identified recipes submitted during the general western holiday season (October to December) and created a new column, 'is_holiday_season', to indicate whether a recipe falls into this category. Additionally, I extracted values from the 'nutrition' column into separate columns such as 'calories (#)', 'total fat (PDV)', 'sugar (PDV)', and others. 
 Information  about these relationships could help contributors produce better recipes during the festive season. Additionally, these findings could lead to future work exploring how nutritional factors or seasonal sentiments influence ratings and preferences for holiday foods
 
 ## Data Cleaning and Exploratory Data Analysis
@@ -387,9 +387,47 @@ The GridSearchCV process helped me identify the optimal combination of hyperpara
 The final model's performance was assessed using the **R^2 score** of **0.4418**, a measure of how well the model explains the variability of the target variable. The model's R^2 score improved by a significant margin compared to the baseline model, indicating that the feature engineering (log scaling and encoding) and hyperparameter tuning led to a better fit for the data.
 
 ### 6. **Conclusion**
-By introducing **is_holiday_season** as a categorical feature, log-scaling **sugar (PDV)**, **total_fat (PDV)**, and **calories (#)**, and using GridSearchCV to fine-tune the hyperparameters of the RandomForestRegressor, I achieved a more robust model that better predicts recipe ratings. These modifications allowed the model to account for important interactions between features and improve its predictive accuracy. This is by no means a great model, but a lot of improvement has been made since the baseline model.
+By introducing **is_holiday_season** as a categorical feature, log-scaling **sugar (PDV)**, **total_fat (PDV)**, and simply passing through **calories (#)**, and using GridSearchCV to fine-tune the hyperparameters of the RandomForestRegressor, I achieved a more robust model that better predicts recipe ratings. These modifications allowed the model to account for important interactions between features and improve its predictive accuracy. This is by no means a great model, but a lot of improvement has been made since the baseline model.
 
 
 
 ## Fairness Analysis
+
+
+For this fairness analysis, I assessed the performance of my model by examining whether it treats holiday and non-holiday recipes fairly. The feature `is_holiday_season` was used to distinguish between these two groups, with 1 representing holiday recipes and 0 representing non-holiday recipes. 
+
+Since `is_holiday_season` is also a feature used in training the model, it is important to be cautiuos when interpreting the results of this analysis, as the model is already aware of this distinction. Despite this, I performed the fairness analysis to determine whether the model's performance differs significantly between these two groups, which could indicate bias towards one group over the other. Determining and identifying any bias still in the model is crucial for improvement and use in the future
+
+### Group Definitions
+- **Holiday Recipes**: Recipes labeled with `is_holiday_season == 1`
+- **Non-Holiday Recipes**: Recipes labeled with `is_holiday_season == 0`
+
+### Fairness Metric
+I chose to evaluate the **Root Mean Squared Error (RMSE)** as the fairness metric. RMSE is a common metric used to evaluate the performance of regression models, and in this case, it measures the accuracy of the predicted ratings for each group of recipes. The lower the RMSE, the more accurate the model's predictions.
+
+### Hypotheses
+- **Null Hypothesis (H₀)**: My model is fair. The RMSE for holiday recipes and non-holiday recipes are roughly the same, and any differences are due to random chance.
+- **Alternative Hypothesis (H₁)**: My model is unfair. The RMSE for holiday recipes differs significantly from that of non-holiday recipes.
+
+### Significance Level
+I used a significance level of 0.05, meaning that if the p-value from our permutation test is below 0.05, I will reject the null hypothesis and conclude that the model's performance is significantly different between the two groups.
+
+### Methodology
+1. **Split the Data**: I split the test data into two groups based on the `is_holiday_season` column: holiday and non-holiday recipes.
+2. **Compute RMSE**: I calculated the RMSE for each group to evaluate how well the model performs for each group.
+3. **Permutation Test**: To assess whether the observed difference in RMSE is statistically significant, I shuffled the groups 1000 times and calculated the RMSE difference for each shuffle.
+4. **Calculate p-value**: The p-value was calculated as the proportion of permuted differences greater than or equal to the observed difference in RMSE.
+
+### Results
+- **Observed RMSE Difference**: 0.0262
+- **p-value from Permutation Test**: 1.0
+
+### Interpretation
+The observed difference in RMSE between holiday and non-holiday recipes is 0.0262. After running the permutation test, we obtained a p-value of 1.0. This p-value is much greater than the significance level of 0.05, which means we **fail to reject** the null hypothesis.
+
+### Conclusion
+Based on the permutation test, I found that the model’s performance is not significantly different between holiday and non-holiday recipes. Thus, I can conclude that there is no evidence of unfairness in the model's performance between these two groups, despite the fact that `is_holiday_season` is used as a feature in training the model. 
+
+However, it’s important to note that since `is_holiday_season` is part of the model's features, the analysis is inherently limited in its ability to assess true fairness. The model might already be biased by this feature, and further investigation would be required to explore other fairness metrics or features to ensure a comprehensive analysis.
+
 
