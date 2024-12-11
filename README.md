@@ -5,7 +5,7 @@
 
 Author: Aryan Kanuparti
 
-
+---
 ## Introduction
 
 In most cultures, the holidays are a time to be grateful for what we have, cherish moments with family and friends, and, perhaps most importantly, enjoy delicious food. Holiday dishes often carry special significance, with recipes passed down through generations or designed to capture the festive spirit. However, the indulgent nature of holiday foods raises intriguing questions about their nutritional value and popularity. Do holiday recipes, often laden with sugar and fats, receive higher ratings simply due to the nostalgia and festive atmosphere, or do health-conscious individuals rate them lower because of their nutritional content?
@@ -45,6 +45,7 @@ The second dataset, `interactions`, contains 731927 rows with each one represent
 **Given the datasets, I am investigating whether people rate holiday recipes and non-holiday recipes similarly.** To answer this question, I identified recipes submitted during the general western holiday season (October to December) and created a new column, 'is_holiday_season', to indicate whether a recipe falls into this category. Additionally, I extracted values from the 'nutrition' column into separate columns such as 'calories (#)', 'total fat (PDV)', 'sugar (PDV)', and others. 
 Information  about these relationships could help contributors produce better recipes during the festive season. Additionally, these findings could lead to future work exploring how nutritional factors or seasonal sentiments influence ratings and preferences for holiday foods
 
+---
 ## Data Cleaning and Exploratory Data Analysis
 
 I followed this outline to clean and explore my data before getting into my testing and modeling.
@@ -127,14 +128,12 @@ For the single variable analysis, I wanted to explore ratio of holiday to non-ho
 ></iframe>
 
 It appears that there are far more non-holiday recipes than holiday ones, which will make our future analysis a little challenging. 
-
 <iframe
   src="assets/log_scaled_histogram_sugar.html"
   width="800"
   height="600"
   frameborder="0"
 ></iframe>
-
 In looking at the shape of the sugar (PDV), it is skewed right with a fairly even log-scaled distribution which will be useful for training models in the future.
 
 ### Bivariate Analysis
@@ -172,6 +171,7 @@ For this section, I wanted to investigate similar relationships between the holi
 
 These pivot tables clearly highlight the marginal differnces between holiday and non-holiday food. It is interesting to note that the average rating of holiday foods is actually slightly lower then non-holiday foods, while the other nutritional variables follow the opposite trend.
 
+---
 ## Assessment of Missingness
 
 `'date'`, `'rating'`, and `'review'`, have a significant amount of missing values.
@@ -205,8 +205,6 @@ After running 1,000 permutations by shuffling the missingness of the 'rating' co
 ### Conclusion
 Since the p-value is less than the threshold, we reject the null hypothesis. This indicates that the missingness of ratings is dependent on the number of steps in the recipe.
 
----
-
 ### Cooking Time (Minutes) and Rating
 - **Null Hypothesis (H₀):** The missingness of ratings does not depend on the cooking time of the recipe in minutes.
 - **Alternative Hypothesis (H₁):** The missingness of ratings does depend on the cooking time of the recipe in minutes.
@@ -225,13 +223,14 @@ Outliers in cooking time posed a challenge for examining the distributions, but 
 ### Conclusion
 Since the p-value is greater than the threshold, we fail to reject the null hypothesis. This suggests that the missingness of ratings is not dependent on the cooking time of the recipe.
 
+---
 ## Hypothesis Testing
 
-## Introduction
+
 This study examines whether recipes submitted during holiday seasons differ significantly from non-holiday recipes in terms of average ratings and sugar content. Holiday seasons may influence both the types of recipes shared and how they are received due to cultural or seasonal preferences. I hypothesize that holiday recipes may have higher average ratings and distinct sugar content distributions compared to non-holiday recipes.
 
 To test these hypotheses, I conducted two-sample Kolmogorov-Smirnov (K-S) tests for the distributions of ratings and sugar content between holiday and non-holiday recipes.
----
+
 
 ### Hypotheses
 #### Test for Ratings:
@@ -242,15 +241,11 @@ To test these hypotheses, I conducted two-sample Kolmogorov-Smirnov (K-S) tests 
 - **Null Hypothesis (H₀):** The distributions of sugar content for holiday and non-holiday recipes are the same.
 - **Alternative Hypothesis (H₁):** The distributions of sugar content for holiday recipes differ significantly from those for non-holiday recipes.
 
----
-
 ### Test Details
 
 - **Test Statistic:** Kolmogorov-Smirnov Test Statistic (K-S Statistic)
 - **Significance Level (α):** 0.01  
-We used the Kolmogorov-Smirnov test as it is a non-parametric method that compares the cumulative distributions of two samples to determine if they are from the same population.
-
----
+I used the Kolmogorov-Smirnov test as it is a non-parametric method that compares the cumulative distributions of two samples to determine if they are from the same population.
 
 ### Results
 
@@ -262,7 +257,7 @@ We used the Kolmogorov-Smirnov test as it is a non-parametric method that compar
 - **K-S Test Statistic:** 0.0254  
 - **p-value:** (8.33 x 10^{-20})
 
----
+
 
 ### Interpretation of Results
 
@@ -272,11 +267,12 @@ We used the Kolmogorov-Smirnov test as it is a non-parametric method that compar
 2. **Sugar Content:**  
    The p-value (8.33 x 10^{-20}) is also far below the significance level of 0.01. Hence, we reject the null hypothesis and conclude that the distributions of sugar content for holiday and non-holiday recipes are significantly different. This difference may arise because holiday recipes are often sweeter due to cultural traditions and seasonal preferences.
 
----
+
 
 ### Conclusion
 Our analysis demonstrates significant differences in both ratings and sugar content between holiday and non-holiday recipes. Holiday recipes tend to be rated differently, likely due to their cultural or celebratory context. Additionally, the higher sugar content in holiday recipes aligns with expectations of indulgence during festive periods. These findings suggest that seasonality has a meaningful impact on both the composition and reception of recipes.
 
+---
 ## Framing a Prediction Problem
 
 ### Predicting Average Rating of Recipes
@@ -293,7 +289,7 @@ To evaluate the performance of my regression models, I will use two metrics:
 
 Since I am predicting a continuous value, regression will be employed, and I will focus on how well the **is_holiday_season** and **sugar (PDV)** features help explain the variance in the **avg_rating** of recipes.
 
-
+---
 ## Baseline Model
 
 ### Model Description
@@ -348,7 +344,7 @@ After making this initial model and reevaluting my methods, I compiled some thou
 While the initial linear regression model offers a baseline, the poor performance (as indicated by the near-zero R² score) suggests that significant improvements are needed. The next steps will focus on improving the feature set, exploring better imputation techniques, and trying alternative regression models to enhance predictive accuracy. Given the current results, I do not consider this model to be "good," -- in fact it is really bad -- but I see clear paths for improvement.
 
 
-
+---
 ## Final Model
 
 I went through a couple of differnt iteration to find the optimal final model but this is what I ended up with. 
@@ -390,7 +386,7 @@ The final model's performance was assessed using the **R^2 score** of **0.4418**
 By introducing **is_holiday_season** as a categorical feature, log-scaling **sugar (PDV)**, **total_fat (PDV)**, and simply passing through **calories (#)**, and using GridSearchCV to fine-tune the hyperparameters of the RandomForestRegressor, I achieved a more robust model that better predicts recipe ratings. These modifications allowed the model to account for important interactions between features and improve its predictive accuracy. This is by no means a great model, but a lot of improvement has been made since the baseline model.
 
 
-
+---
 ## Fairness Analysis
 
 
@@ -438,7 +434,7 @@ With this p value of 0, and the significance level of 0.05, I can safely reject 
 
 
 
-
+---
 This investigation into holiday versus non-holiday foods presents an interesting avenue for future research. Additional models could be tested, and more nuanced features (such as the specific types of ingredients or sentiment scores) could be incorporated to better capture the relationship between food type, nutritional content, and ratings. This would help refine our understanding of how the festive season influences culinary preferences and the factors that drive recipe popularity on platforms like food.com.
 
 
