@@ -128,7 +128,6 @@ For the single variable analysis, I wanted to explore ratio of holiday to non-ho
 
 It appears that there are far more non-holiday recipes than holiday ones, which will make our future analysis a little challenging. 
 
-
 <iframe
   src="assets/log_scaled_histogram_sugar.html"
   width="800"
@@ -140,8 +139,6 @@ In looking at the shape of the sugar (PDV), it is skewed right with a fairly eve
 
 ### Bivariate Analysis
 For the bivariate analysis, I wanted to study the relationship between sugar and fat becasue I believe that recipes with more of both of these are likely unhealthy and thus taste good enough to garner higher ratings.
-
-
 <iframe
   src="assets/scatter_sugar_vs_fat.html"
   width="1000"
@@ -151,14 +148,12 @@ For the bivariate analysis, I wanted to study the relationship between sugar and
 
 It appears that there isnt any strong noticable trend, other than most of the values being smaller rather than larger, with some relatively massive outliers for both sugar and fat
 Furthermore, to ties this back into the holiday food question, I wanted to determine some baseline information like the mean sugar (PDV) in holiday and non-holiday foods.
-
 <iframe
   src="assets/mean_sugar_by_season.html"
   width="800"
   height="600"
   frameborder="0"
 ></iframe>
-
 Based on the graph, I can see that holiday foods have marginally more sugar on average, which is a good sign for my initial hypothesis but requires further analysis.
 
 ### Interesting Aggregates
@@ -322,8 +317,6 @@ In this initial model, I aimed to predict the average recipe rating (`rating_avg
 - **Model Type**: The model used was **Linear Regression**, a common method for predicting continuous values.
 - **Evaluation Metrics**: The model's performance was evaluated using several metrics:
   - **Mean Squared Error (MSE)**: 0.241
-  - **Root Mean Squared Error (RMSE)**: 0.491
-  - **Mean Absolute Error (MAE)**: 0.339
   - **R² Score**: 0.0003
 
 ### Model Performance
@@ -352,12 +345,49 @@ After making this initial model and reevaluting my methods, I compiled some thou
    - **Improvement**: I will explore feature engineering techniques, such as creating new features or transforming existing ones, to improve the model's performance. For example, I could introduce interaction terms between features like sugar (PDV) and total_fat (PDV) which togather might be more correlated with rating_avg. 
 
 
-
 While the initial linear regression model offers a baseline, the poor performance (as indicated by the near-zero R² score) suggests that significant improvements are needed. The next steps will focus on improving the feature set, exploring better imputation techniques, and trying alternative regression models to enhance predictive accuracy. Given the current results, I do not consider this model to be "good," -- in fact it is really bad -- but I see clear paths for improvement.
 
 
 
 ## Final Model
+
+I went through a couple of differnt iteration to find the optimal final model but this is what I ended up with. 
+I used is_holiday_season, log-scaled sugar (PDV), log-scaled total_fat (PDV), and calories(#) as the features for my model.
+Before training, I used probabilistic imputation on all relevant columns to decrease bias and ensure that missing values did as little harm as possible in terms of the models performence. In my intermediate models I tried a number of things after the probabilistic imputation. The biggest improvement came from switching to a RandomForestRegression model and tuning its hyperparameter using 5-fold cross validation via GridSearchCV. This shot up the R^of the model by around 0.4. I tried to engineer new features like an interaction term between the fat and sugar PDV values but this did not produce significant results. After a couple more iterations, I arrived at this final model with the following features
+
+
+### 1. **is_holiday_season**
+The **is_holiday_season** column indicates whether the recipe was submitted during a holiday season. I chose this feature because holiday seasons often influence people’s cooking behaviors and preferences, which could impact the ratings of recipes. I one-hot encoded this column to convert it into a usable feature for the model, just like we did for the baseline model. This encoding ensures that the model can account for any potential seasonal effect on recipe ratings.
+
+### 2. **sugar (PDV) and total_fat (PDV) - Log Scaled**
+The **sugar (PDV)** and **total_fat (PDV)** columns represent the amount of sugar and fat in the recipe, measured in percentage of the daily value. These features were heavily skewed, with their distributions shifted to the right. To address this, I applied a **log transformation** to both columns. Log transformations help normalize these skewed features and reduce the impact of outliers, making the model more sensitive to the data's distribution. I hypothesize that this transformation improves the model's ability to predict ratings by providing a more stable relationship between sugar/fat content and the outcome.
+
+### 3. **calories (#)**
+The **calories (#)** column represents the total calories of the recipe. This feature was also somewhat skewed but I chose not to log transform it. Calories are a more direct measure of the recipe's energy content, and log-transforming them could obscure their natural relationship with the target variable (average rating), especially if the range of values is not extreme or heavily skewed.
+
+### 4. **Modeling Algorithm and Hyperparameter Tuning**
+We chose **RandomForestRegressor** as the modeling algorithm due to its ability to handle complex, non-linear relationships and interactions between features. Additionally, Random Forests are robust to overfitting and can handle the large number of features we engineered.
+
+I used **GridSearchCV** to tune the hyperparameters of the RandomForestRegressor, specifically focusing on the following parameters:
+- **n_estimators**: The number of trees in the forest, with values [10, 50, 100].
+- Increasing the number of trees generally improves the model's performance because it stabilizes predictions and makes them less sensitive to noise in the data. With too few trees, the model might have high variance and be overly sensitive to fluctuations in the training data. Finding the optimal number of trees allows me to balance better performance and computational efficiency.
+  
+- **max_depth**: The maximum depth of the trees, with values [10, 20, 30].
+- Tuning max_depth allows me to balance between overfitting and underfitting. If the model is overfitting (i.e., performing well on training data but poorly on test data), reducing the depth helps improve generalization. By limiting the depth, I prevent the model from becoming too complex and capturing noise in the training data.
+  
+- **min_samples_split**: The minimum number of samples required to split an internal node, with values [2, 5, 10].
+- By increasing the value of min_samples_split, I prevent the model from creating too many small, deep trees that could overfit the training data. This encourages the trees to only make splits when there are enough samples, which improves generalization. A smaller value (more splits) could help the tree capture finer details in the data, but risks overfitting. On the other hand, larger values force the trees to generalize better, though they may miss subtler patterns in the data.
+
+The GridSearchCV process helped me identify the optimal combination of hyperparameters, which were:
+- **n_estimators = 100**
+- **max_depth = 20**
+- **min_samples_split = 5**
+
+### 5. **Model Performance**
+The final model's performance was assessed using the **R^2 score** of **0.4418**, a measure of how well the model explains the variability of the target variable. The model's R^2 score improved by a significant margin compared to the baseline model, indicating that the feature engineering (log scaling and encoding) and hyperparameter tuning led to a better fit for the data.
+
+### 6. **Conclusion**
+By introducing **is_holiday_season** as a categorical feature, log-scaling **sugar (PDV)**, **total_fat (PDV)**, and **calories (#)**, and using GridSearchCV to fine-tune the hyperparameters of the RandomForestRegressor, we achieved a more robust model that better predicts recipe ratings. These modifications allowed the model to account for important interactions between features and improve its predictive accuracy. This is by no means a great model, but a lot of improvement has been made since the baseline model.
 
 
 
