@@ -148,8 +148,8 @@ For the bivariate analysis, I wanted to study the relationship between sugar and
 
 <iframe
   src="assets/scatter_sugar_vs_fat.html"
-  width="800"
-  height="600"
+  width="1000"
+  height="800"
   frameborder="0"
 ></iframe>
 
@@ -190,11 +190,51 @@ These pivot tables clearly highlight the marginal differnces between holiday and
 
 ### NMAR Analysis
 
-Out of these three, I believe it to be most likely that the `'review'` column is NMAR. In other words the missigness of `'review'` column depends on the values or natures of the review themselves. The logic is that if people are apathetic about the recipe they are less likely to write out a review. If they really truly enjoyed the recipe they would take the time to write out a review, if not they might just click the rating and leave.
+Out of these three, I believe it to be most likely that the `'review'` column is NMAR. In other words the missigness of `'review'` column depends on the values or natures of the review themselves. The logic is that if people are apathetic about the recipe they are less likely to write out a review. If they really truly enjoyed the recipe they would take the time to write out a review, if not they might just click the rating and leave. Knowing somethig like the amount of time the reviewers spend on the sight might shed some light on the missigness of the review column. For exmaple, the longer someone spends leaving the review and rating the recipe, the more likely they were to type out a response is one hypothesis that could tested.
 
 
 ### Missingness Dependency
-For this section, I'll pick the `'rating'` columns as I beleive to have nontrivial missigness. Recall earlier that I replace all the ratings of 0 ( from a 1-5 scale) to null/missing values.
+For this section, I'll pick the `'rating'` columns as I beleive to have nontrivial missigness. Recall earlier that I replace all the ratings of 0 ( from a 1-5 scale) to null/missing values. My initial thoughts about the dependcnay of the missignems of this column is that number of steps and cooking time might be influential here. The logic is that if someone finds a recipe and sees a long cook time, or complicated and long number of steps, they might be inclined to not even make the recipe and thus not rate it which would explain the missignss of the rating column.
+
+To investigate this, I conducted two permutation tests to assess whether the missingness of ratings is dependent on these factors.
+
+**Number of Steps and Rating**
+*Null Hypothesis:* The missingness of ratings does not depend on the number of steps in the recipe.
+*Alternate Hypothesis:* The missingness of ratings does depend on the number of steps in the recipe.
+*Test Statistic:* The absolute difference in the mean number of steps between the group with non-missing ratings and the group with missing ratings.
+*Significance Level:* 0.05, a fair significance level, stringent evidence not required to draw connections
+After running 1,000 permutations by shuffling the missingness of the 'rating' column, I calculated the simulated mean differences under the null hypothesis. The observed statistic, 4.3145, is shown by the red vertical line on the graph. The p-value for this test was 0.0, which is less than the significance level of 0.05.
+
+<iframe
+  src="assets/permutation_test_n_steps.html"
+  width="800"
+  height="600"
+  frameborder="0"
+></iframe>
+
+Conclusion: Since the p-value is less than the threshold, we reject the null hypothesis. This indicates that the missingness of ratings is dependent on the number of steps in the recipe.
+
+**Cooking Time (Minutes) and Rating**
+*Null Hypothesis:* The missingness of ratings does not depend on the cooking time of the recipe in minutes.
+*Alternate Hypothesis:* The missingness of ratings does depend on the cooking time of the recipe in minutes.
+*Test Statistic:* The absolute difference in the mean cooking time between the group with non-missing ratings and the group with missing ratings.
+*Significance Level:* 0.05, a fair significance level, stringent evidence not required to draw connections
+Outliers in cooking time posed a challenge for examining the distributions, but the test proceeded by considering the absolute mean differences. After running 1,000 permutations, the observed statistic was 51.4524, and the p-value was 0.12. This is greater than the significance level of 0.05.
+
+<iframe
+  src="assets/permutation_test_minutes.html"
+  width="800"
+  height="600"
+  frameborder="0"
+></iframe>
+
+
+Conclusion: Since the p-value is greater than the threshold, we fail to reject the null hypothesis. This suggests that the missingness of ratings is not dependent on the cooking time of the recipe.
+
+Summary
+From these tests, we observe that the missingness of the 'rating' column appears to depend on the complexity of the recipe as measured by the number of steps but does not depend on the cooking time. These findings align with the hypothesis that individuals may avoid rating recipes they perceive as overly complicated, while cooking time alone is not a strong determinant of rating behavior.
+
+
 
 ## Hypothesis Testing
 
