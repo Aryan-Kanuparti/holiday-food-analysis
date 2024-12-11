@@ -197,13 +197,15 @@ Out of these three, I believe it to be most likely that the `'review'` column is
 For this section, I'll pick the `'rating'` columns as I beleive to have nontrivial missigness. Recall earlier that I replace all the ratings of 0 ( from a 1-5 scale) to null/missing values. My initial thoughts about the dependcnay of the missignems of this column is that number of steps and cooking time might be influential here. The logic is that if someone finds a recipe and sees a long cook time, or complicated and long number of steps, they might be inclined to not even make the recipe and thus not rate it which would explain the missignss of the rating column.
 
 To investigate this, I conducted two permutation tests to assess whether the missingness of ratings is dependent on these factors.
+# Hypothesis Testing Report: Missingness of Ratings
 
-**Number of Steps and Rating**
-*Null Hypothesis:* The missingness of ratings does not depend on the number of steps in the recipe.
-*Alternate Hypothesis:* The missingness of ratings does depend on the number of steps in the recipe.
-*Test Statistic:* The absolute difference in the mean number of steps between the group with non-missing ratings and the group with missing ratings.
-*Significance Level:* 0.05, a fair significance level, stringent evidence not required to draw connections
-After running 1,000 permutations by shuffling the missingness of the 'rating' column, I calculated the simulated mean differences under the null hypothesis. The observed statistic, 4.3145, is shown by the red vertical line on the graph. The p-value for this test was 0.0, which is less than the significance level of 0.05.
+## Number of Steps and Rating
+- **Null Hypothesis (H₀):** The missingness of ratings does not depend on the number of steps in the recipe.
+- **Alternative Hypothesis (H₁):** The missingness of ratings does depend on the number of steps in the recipe.
+- **Test Statistic:** The absolute difference in the mean number of steps between the group with non-missing ratings and the group with missing ratings.
+- **Significance Level (α):** 0.05 (A fair significance level, stringent evidence not required to draw connections)
+
+After running 1,000 permutations by shuffling the missingness of the 'rating' column, we calculated the simulated mean differences under the null hypothesis. The observed statistic, **4.3145**, is shown by the red vertical line on the graph. The p-value for this test was **0.0**, which is less than the significance level of 0.05.
 
 <iframe
   src="assets/permutation_test_n_steps.html"
@@ -212,14 +214,18 @@ After running 1,000 permutations by shuffling the missingness of the 'rating' co
   frameborder="0"
 ></iframe>
 
-Conclusion: Since the p-value is less than the threshold, we reject the null hypothesis. This indicates that the missingness of ratings is dependent on the number of steps in the recipe.
+### Conclusion
+Since the p-value is less than the threshold, we reject the null hypothesis. This indicates that the missingness of ratings is dependent on the number of steps in the recipe.
 
-**Cooking Time (Minutes) and Rating**
-*Null Hypothesis:* The missingness of ratings does not depend on the cooking time of the recipe in minutes.
-*Alternate Hypothesis:* The missingness of ratings does depend on the cooking time of the recipe in minutes.
-*Test Statistic:* The absolute difference in the mean cooking time between the group with non-missing ratings and the group with missing ratings.
-*Significance Level:* 0.05, a fair significance level, stringent evidence not required to draw connections
-Outliers in cooking time posed a challenge for examining the distributions, but the test proceeded by considering the absolute mean differences. After running 1,000 permutations, the observed statistic was 51.4524, and the p-value was 0.12. This is greater than the significance level of 0.05.
+---
+
+## Cooking Time (Minutes) and Rating
+- **Null Hypothesis (H₀):** The missingness of ratings does not depend on the cooking time of the recipe in minutes.
+- **Alternative Hypothesis (H₁):** The missingness of ratings does depend on the cooking time of the recipe in minutes.
+- **Test Statistic:** The absolute difference in the mean cooking time between the group with non-missing ratings and the group with missing ratings.
+- **Significance Level (α):** 0.05 (A fair significance level, stringent evidence not required to draw connections)
+
+Outliers in cooking time posed a challenge for examining the distributions, but the test proceeded by considering the absolute mean differences. After running 1,000 permutations, the observed statistic was **51.4524**, and the p-value was **0.12**. This is greater than the significance level of 0.05.
 
 <iframe
   src="assets/permutation_test_minutes.html"
@@ -228,15 +234,64 @@ Outliers in cooking time posed a challenge for examining the distributions, but 
   frameborder="0"
 ></iframe>
 
-
-Conclusion: Since the p-value is greater than the threshold, we fail to reject the null hypothesis. This suggests that the missingness of ratings is not dependent on the cooking time of the recipe.
-
-Summary
-From these tests, we observe that the missingness of the 'rating' column appears to depend on the complexity of the recipe as measured by the number of steps but does not depend on the cooking time. These findings align with the hypothesis that individuals may avoid rating recipes they perceive as overly complicated, while cooking time alone is not a strong determinant of rating behavior.
-
+### Conclusion
+Since the p-value is greater than the threshold, we fail to reject the null hypothesis. This suggests that the missingness of ratings is not dependent on the cooking time of the recipe.
 
 
 ## Hypothesis Testing
+
+# Hypothesis Testing Report
+
+## Introduction
+This study examines whether recipes submitted during holiday seasons differ significantly from non-holiday recipes in terms of average ratings and sugar content. Holiday seasons may influence both the types of recipes shared and how they are received due to cultural or seasonal preferences. I hypothesize that holiday recipes may have higher average ratings and distinct sugar content distributions compared to non-holiday recipes.
+
+To test these hypotheses, I conducted two-sample Kolmogorov-Smirnov (K-S) tests for the distributions of ratings and sugar content between holiday and non-holiday recipes.
+---
+
+## Hypotheses
+### Test for Ratings:
+- **Null Hypothesis (H₀):** The distributions of ratings for holiday and non-holiday recipes are the same.
+- **Alternative Hypothesis (H₁):** The distributions of ratings for holiday recipes differ significantly from those for non-holiday recipes.
+
+### Test for Sugar Content:
+- **Null Hypothesis (H₀):** The distributions of sugar content for holiday and non-holiday recipes are the same.
+- **Alternative Hypothesis (H₁):** The distributions of sugar content for holiday recipes differ significantly from those for non-holiday recipes.
+
+---
+
+## Test Details
+
+- **Test Statistic:** Kolmogorov-Smirnov Test Statistic (K-S Statistic)
+- **Significance Level (α):** 0.01  
+We used the Kolmogorov-Smirnov test as it is a non-parametric method that compares the cumulative distributions of two samples to determine if they are from the same population.
+
+---
+
+## Results
+
+### Test for Ratings:
+- **K-S Test Statistic:** 0.0193  
+- **p-value:** \(1.72 \times 10^{-11}\)
+
+### Test for Sugar Content:
+- **K-S Test Statistic:** 0.0254  
+- **p-value:** \(8.33 \times 10^{-20}\)
+
+---
+
+## Interpretation of Results
+
+1. **Ratings:**  
+   The p-value (\(1.72 \times 10^{-11}\)) is far below the significance level of 0.01. Therefore, we reject the null hypothesis and conclude that the distributions of ratings for holiday and non-holiday recipes are significantly different. One potential reason could be that holiday recipes are perceived as more celebratory or indulgent, leading to higher average ratings.
+
+2. **Sugar Content:**  
+   The p-value (\(8.33 \times 10^{-20}\)) is also far below the significance level of 0.01. Hence, we reject the null hypothesis and conclude that the distributions of sugar content for holiday and non-holiday recipes are significantly different. This difference may arise because holiday recipes are often sweeter due to cultural traditions and seasonal preferences.
+
+---
+
+## Conclusion
+Our analysis demonstrates significant differences in both ratings and sugar content between holiday and non-holiday recipes. Holiday recipes tend to be rated differently, likely due to their cultural or celebratory context. Additionally, the higher sugar content in holiday recipes aligns with expectations of indulgence during festive periods. These findings suggest that seasonality has a meaningful impact on both the composition and reception of recipes.
+
 
 
 
