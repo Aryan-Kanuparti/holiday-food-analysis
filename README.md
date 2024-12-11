@@ -430,7 +430,7 @@ Keeping this in mind I performed a secondary fairness analysis, this type splitt
 
 - **Observed Difference in RMSE**: 0.00954782405072313
 - **P-value from Permutation Test**: 0.0
-With this p value of 0, and the significance level of 0.05, I can safely reject the null that any differences betweens my model's performence on low and high calorie foods is due to random chance. In other words, the model's performance is significantly different between low and high calorie recipes. These two fairness analysis leave somewhat inconclusive results, but I would say its generally safe to assume that the model is definitely not perfectly fiar and has quite a bit of room for improvement.
+With this p value of 0, and the significance level of 0.05, I can safely reject the null that any differences betweens my model's performence on low and high calorie foods is due to random chance. In other words, the model's performance is significantly different between low and high calorie recipes. These two fairness analysis leave somewhat inconclusive results, but I would say its generally safe to assume that the model is definitely not perfectly fair and has quite a bit of room for improvement.
 
 
 
