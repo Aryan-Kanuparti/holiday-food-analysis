@@ -64,7 +64,7 @@ I followed this outline to clean and explore my data before getting into my test
 
 1. Convert submitted date column to datetime.
 
-   - These two columns are both stored as objects initially, so we converted them into datetime to allow us conduct analysis on trends over time if needed.
+   - These two columns are both stored as objects initially, so I converted them into datetime to allow us conduct analysis on trends over time if needed.
 
 1. Drop unused columns
 
@@ -193,7 +193,7 @@ To investigate this, I conducted two permutation tests to assess whether the mis
 - **Test Statistic:** The absolute difference in the mean number of steps between the group with non-missing ratings and the group with missing ratings.
 - **Significance Level (α):** 0.05 (A fair significance level, stringent evidence not required to draw connections)
 
-After running 1,000 permutations by shuffling the missingness of the 'rating' column, we calculated the simulated mean differences under the null hypothesis. The observed statistic, **4.3145**, is shown by the red vertical line on the graph. The p-value for this test was **0.0**, which is less than the significance level of 0.05.
+After running 1,000 permutations by shuffling the missingness of the 'rating' column, I calculated the simulated mean differences under the null hypothesis. The observed statistic, **4.3145**, is shown by the red vertical line on the graph. The p-value for this test was **0.0**, which is less than the significance level of 0.05.
 
 <iframe
   src="assets/permutation_test_n_steps.html"
@@ -357,7 +357,7 @@ Before training, I used probabilistic imputation on all relevant columns to decr
 
 
 ### 1. **is_holiday_season**
-The **is_holiday_season** column indicates whether the recipe was submitted during a holiday season. I chose this feature because holiday seasons often influence people’s cooking behaviors and preferences, which could impact the ratings of recipes. I one-hot encoded this column to convert it into a usable feature for the model, just like we did for the baseline model. This encoding ensures that the model can account for any potential seasonal effect on recipe ratings.
+The **is_holiday_season** column indicates whether the recipe was submitted during a holiday season. I chose this feature because holiday seasons often influence people’s cooking behaviors and preferences, which could impact the ratings of recipes. I one-hot encoded this column to convert it into a usable feature for the model, just like I did for the baseline model. This encoding ensures that the model can account for any potential seasonal effect on recipe ratings.
 
 ### 2. **sugar (PDV) and total_fat (PDV) - Log Scaled**
 The **sugar (PDV)** and **total_fat (PDV)** columns represent the amount of sugar and fat in the recipe, measured in percentage of the daily value. These features were heavily skewed, with their distributions shifted to the right. To address this, I applied a **log transformation** to both columns. Log transformations help normalize these skewed features and reduce the impact of outliers, making the model more sensitive to the data's distribution. I hypothesize that this transformation improves the model's ability to predict ratings by providing a more stable relationship between sugar/fat content and the outcome.
@@ -366,7 +366,7 @@ The **sugar (PDV)** and **total_fat (PDV)** columns represent the amount of suga
 The **calories (#)** column represents the total calories of the recipe. This feature was also somewhat skewed but I chose not to log transform it. Calories are a more direct measure of the recipe's energy content, and log-transforming them could obscure their natural relationship with the target variable (average rating), especially if the range of values is not extreme or heavily skewed.
 
 ### 4. **Modeling Algorithm and Hyperparameter Tuning**
-We chose **RandomForestRegressor** as the modeling algorithm due to its ability to handle complex, non-linear relationships and interactions between features. Additionally, Random Forests are robust to overfitting and can handle the large number of features we engineered.
+We chose **RandomForestRegressor** as the modeling algorithm due to its ability to handle complex, non-linear relationships and interactions between features. Additionally, Random Forests are robust to overfitting and can handle the larger number of features I engineered.
 
 I used **GridSearchCV** to tune the hyperparameters of the RandomForestRegressor, specifically focusing on the following parameters:
 - **n_estimators**: The number of trees in the forest, with values [10, 50, 100].
@@ -387,7 +387,7 @@ The GridSearchCV process helped me identify the optimal combination of hyperpara
 The final model's performance was assessed using the **R^2 score** of **0.4418**, a measure of how well the model explains the variability of the target variable. The model's R^2 score improved by a significant margin compared to the baseline model, indicating that the feature engineering (log scaling and encoding) and hyperparameter tuning led to a better fit for the data.
 
 ### 6. **Conclusion**
-By introducing **is_holiday_season** as a categorical feature, log-scaling **sugar (PDV)**, **total_fat (PDV)**, and **calories (#)**, and using GridSearchCV to fine-tune the hyperparameters of the RandomForestRegressor, we achieved a more robust model that better predicts recipe ratings. These modifications allowed the model to account for important interactions between features and improve its predictive accuracy. This is by no means a great model, but a lot of improvement has been made since the baseline model.
+By introducing **is_holiday_season** as a categorical feature, log-scaling **sugar (PDV)**, **total_fat (PDV)**, and **calories (#)**, and using GridSearchCV to fine-tune the hyperparameters of the RandomForestRegressor, I achieved a more robust model that better predicts recipe ratings. These modifications allowed the model to account for important interactions between features and improve its predictive accuracy. This is by no means a great model, but a lot of improvement has been made since the baseline model.
 
 
 
