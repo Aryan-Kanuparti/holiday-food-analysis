@@ -430,6 +430,14 @@ Based on the permutation test, I found that the model’s performance is not sig
 
 However, it’s important to note that this analysis is limited by the inclusion of is_holiday_season as a feature in the model. The model may already be biased by this feature, which could affect the fairness of predictions. While the results suggest no significant bias in terms of performance, further investigation is needed to examine how the model's predictions might be influenced by other factors, such as nutritional content or sentiment associated with holiday foods.
 
+Keeping this in mind I performed a secondary fairness analysis, this type splitting the dataframe based low or high calorie foods. Making the threshold for the binarize the median of the calorie values, I split the data and ran another permutation test. With the sae significance level of 0.05 and the same process, I arrived at these results:
+
+- **Observed Difference in RMSE**: 0.00954782405072313
+- **P-value from Permutation Test**: 0.0
+With this p value of 0, and the significance level of 0.05, I can safely reject the null that any differences betweens my model's performence on low and high calorie foods is due to random chance. In other words, the model's performance is significantly different between low and high calorie recipes. These two fairness analysis leave somewhat inconclusive results, but I would say its generally safe to assume that the model is definitely not perfectly fiar and has quite a bit of room for improvement.
+
+
+
 
 This investigation into holiday versus non-holiday foods presents an interesting avenue for future research. Additional models could be tested, and more nuanced features (such as the specific types of ingredients or sentiment scores) could be incorporated to better capture the relationship between food type, nutritional content, and ratings. This would help refine our understanding of how the festive season influences culinary preferences and the factors that drive recipe popularity on platforms like food.com.
 
