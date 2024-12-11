@@ -412,7 +412,7 @@ I chose to evaluate the **Root Mean Squared Error (RMSE)** as the fairness metri
 ### Significance Level
 I used a significance level of 0.05, meaning that if the p-value from our permutation test is below 0.05, I will reject the null hypothesis and conclude that the model's performance is significantly different between the two groups.
 
-### Methodology
+
 1. **Split the Data**: I split the test data into two groups based on the `is_holiday_season` column: holiday and non-holiday recipes.
 2. **Compute RMSE**: I calculated the RMSE for each group to evaluate how well the model performs for each group.
 3. **Permutation Test**: To assess whether the observed difference in RMSE is statistically significant, I shuffled the groups 1000 times and calculated the RMSE difference for each shuffle.
@@ -422,12 +422,15 @@ I used a significance level of 0.05, meaning that if the p-value from our permut
 - **Observed RMSE Difference**: 0.0262
 - **p-value from Permutation Test**: 1.0
 
-### Interpretation
-The observed difference in RMSE between holiday and non-holiday recipes is 0.0262. After running the permutation test, we obtained a p-value of 1.0. This p-value is much greater than the significance level of 0.05, which means we **fail to reject** the null hypothesis.
+
+The observed difference in RMSE between holiday and non-holiday recipes is 0.0262. After running the permutation test, we obtained a p-value of 1.0. This p-value is much greater than the significance level of 0.05, which means we **fail to reject** the null hypothesis and can tentatively assume our model is fair
 
 ### Conclusion
 Based on the permutation test, I found that the model’s performance is not significantly different between holiday and non-holiday recipes. Thus, I can conclude that there is no evidence of unfairness in the model's performance between these two groups, despite the fact that `is_holiday_season` is used as a feature in training the model. 
 
-However, it’s important to note that since `is_holiday_season` is part of the model's features, the analysis is inherently limited in its ability to assess true fairness. The model might already be biased by this feature, and further investigation would be required to explore other fairness metrics or features to ensure a comprehensive analysis.
+However, it’s important to note that this analysis is limited by the inclusion of is_holiday_season as a feature in the model. The model may already be biased by this feature, which could affect the fairness of predictions. While the results suggest no significant bias in terms of performance, further investigation is needed to examine how the model's predictions might be influenced by other factors, such as nutritional content or sentiment associated with holiday foods.
+
+
+This investigation into holiday versus non-holiday foods presents an interesting avenue for future research. Additional models could be tested, and more nuanced features (such as the specific types of ingredients or sentiment scores) could be incorporated to better capture the relationship between food type, nutritional content, and ratings. This would help refine our understanding of how the festive season influences culinary preferences and the factors that drive recipe popularity on platforms like food.com.
 
 
