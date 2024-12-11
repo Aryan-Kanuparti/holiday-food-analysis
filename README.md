@@ -62,7 +62,7 @@ I followed this outline to clean and explore my data before getting into my test
 
    - Based on the description of the columns of the recipe dataset, I know what each individual values inside the brackets of the nutrition columns means. In order to prerfom analysis with those values, I split up the nutrition list for each recipe and put those floats into thier own respective columns. 
 
-1. Convert submitted date column to datetime.
+1. Convert submitted date and date column to datetime.
 
    - These two columns are both stored as objects initially, so I converted them into datetime to allow us conduct analysis on trends over time if needed.
 
