@@ -68,7 +68,7 @@ I followed this outline to clean and explore my data before getting into my test
 
 1. Drop unused columns
 
-   - I then dropped some columns that I decided I would not be using going forward, ['user_id', 'recipe_id'], recipe id is reduntant with id already being a column and the userid of who submitted the review bears no significance in this analysis
+   - I then dropped some columns that I decided I would not be using going forward, ['user_id', 'recipe_id'], recipe id is reduntant with id already being a column, and the userId of whoever submitted the review bears no significance in terms of this analysis.
 
 1. Add `is_holiday_season` to the dataframe
    - Added on a column of boolean values that represented whether each recipe was posted during a holiday month (October - December). False for recipes that were posted in the other nine months and true for the rest. I calculated this column using the clean datetime values in the submitted column.
@@ -190,9 +190,9 @@ Out of these three, I believe it to be most likely that the `'review'` column is
 For this section, I'll pick the `'rating'` columns as I beleive to have nontrivial missigness. Recall earlier that I replace all the ratings of 0 ( from a 1-5 scale) to null/missing values. My initial thoughts about the dependcnay of the missignems of this column is that number of steps and cooking time might be influential here. The logic is that if someone finds a recipe and sees a long cook time, or complicated and long number of steps, they might be inclined to not even make the recipe and thus not rate it which would explain the missignss of the rating column.
 
 To investigate this, I conducted two permutation tests to assess whether the missingness of ratings is dependent on these factors.
-# Hypothesis Testing Report: Missingness of Ratings
+### Hypothesis Testing Report: Missingness of Ratings
 
-## Number of Steps and Rating
+### Number of Steps and Rating
 - **Null Hypothesis (H₀):** The missingness of ratings does not depend on the number of steps in the recipe.
 - **Alternative Hypothesis (H₁):** The missingness of ratings does depend on the number of steps in the recipe.
 - **Test Statistic:** The absolute difference in the mean number of steps between the group with non-missing ratings and the group with missing ratings.
@@ -212,7 +212,7 @@ Since the p-value is less than the threshold, we reject the null hypothesis. Thi
 
 ---
 
-## Cooking Time (Minutes) and Rating
+### Cooking Time (Minutes) and Rating
 - **Null Hypothesis (H₀):** The missingness of ratings does not depend on the cooking time of the recipe in minutes.
 - **Alternative Hypothesis (H₁):** The missingness of ratings does depend on the cooking time of the recipe in minutes.
 - **Test Statistic:** The absolute difference in the mean cooking time between the group with non-missing ratings and the group with missing ratings.
@@ -232,26 +232,24 @@ Since the p-value is greater than the threshold, we fail to reject the null hypo
 
 ## Hypothesis Testing
 
-# Hypothesis Testing Report
-
 ## Introduction
 This study examines whether recipes submitted during holiday seasons differ significantly from non-holiday recipes in terms of average ratings and sugar content. Holiday seasons may influence both the types of recipes shared and how they are received due to cultural or seasonal preferences. I hypothesize that holiday recipes may have higher average ratings and distinct sugar content distributions compared to non-holiday recipes.
 
 To test these hypotheses, I conducted two-sample Kolmogorov-Smirnov (K-S) tests for the distributions of ratings and sugar content between holiday and non-holiday recipes.
 ---
 
-## Hypotheses
-### Test for Ratings:
+### Hypotheses
+#### Test for Ratings:
 - **Null Hypothesis (H₀):** The distributions of ratings for holiday and non-holiday recipes are the same.
 - **Alternative Hypothesis (H₁):** The distributions of ratings for holiday recipes differ significantly from those for non-holiday recipes.
 
-### Test for Sugar Content:
+#### Test for Sugar Content:
 - **Null Hypothesis (H₀):** The distributions of sugar content for holiday and non-holiday recipes are the same.
 - **Alternative Hypothesis (H₁):** The distributions of sugar content for holiday recipes differ significantly from those for non-holiday recipes.
 
 ---
 
-## Test Details
+### Test Details
 
 - **Test Statistic:** Kolmogorov-Smirnov Test Statistic (K-S Statistic)
 - **Significance Level (α):** 0.01  
@@ -259,19 +257,19 @@ We used the Kolmogorov-Smirnov test as it is a non-parametric method that compar
 
 ---
 
-## Results
+### Results
 
-### Test for Ratings:
+#### Test for Ratings:
 - **K-S Test Statistic:** 0.0193  
 - **p-value:** (1.72 x 10^{-11})
 
-### Test for Sugar Content:
+#### Test for Sugar Content:
 - **K-S Test Statistic:** 0.0254  
 - **p-value:** (8.33 x 10^{-20})
 
 ---
 
-## Interpretation of Results
+### Interpretation of Results
 
 1. **Ratings:**  
    The p-value (1.72 x 10^{-11}) is far below the significance level of 0.01. Therefore, we reject the null hypothesis and conclude that the distributions of ratings for holiday and non-holiday recipes are significantly different. One potential reason could be that holiday recipes are perceived as more celebratory or indulgent, leading to higher average ratings.
@@ -281,12 +279,12 @@ We used the Kolmogorov-Smirnov test as it is a non-parametric method that compar
 
 ---
 
-## Conclusion
+### Conclusion
 Our analysis demonstrates significant differences in both ratings and sugar content between holiday and non-holiday recipes. Holiday recipes tend to be rated differently, likely due to their cultural or celebratory context. Additionally, the higher sugar content in holiday recipes aligns with expectations of indulgence during festive periods. These findings suggest that seasonality has a meaningful impact on both the composition and reception of recipes.
 
 ## Framing a Prediction Problem
 
-# Predicting Average Rating of Recipes
+### Predicting Average Rating of Recipes
 
 After conducting my initial exploratory data analysis (EDA) and running the above hypothesis tests, I would like to attempt to predict the average rating of recipes based on a number of features, with the most important being the **is_holiday_season** column. The response variable for this prediction is **rating_avg**, which is a scalar quantitative value ranging from 1 to 5.
 
@@ -303,9 +301,7 @@ Since I am predicting a continuous value, regression will be employed, and I wil
 
 ## Baseline Model
 
-# Baseline Model Report
-
-## Model Description
+### Model Description
 
 In this initial model, I aimed to predict the average recipe rating (`rating_avg`) using two features: `is_holiday_season` and `sugar (PDV)`. Below is a breakdown of the features and how they were processed:
 
@@ -330,13 +326,13 @@ In this initial model, I aimed to predict the average recipe rating (`rating_avg
   - **Mean Absolute Error (MAE)**: 0.339
   - **R² Score**: 0.0003
 
-## Model Performance
+### Model Performance
 
 The R² score of approximately **0.0003** suggests that the model is not effectively predicting the target variable, `rating_avg`. In fact, it performs almost as poorly as predicting the mean of the target for all samples. The RMSE and MAE also indicate substantial error in the predictions.
 
 Given that the R² value is close to zero, it suggests that the current model barely performs better than a simple baseline model that predicts the average rating for every recipe. This indicates that the linear regression model, with its current features and preprocessing steps, is not capturing the underlying relationships between the features and the target variable effectively.
 
-## Ideas for Improvement
+#### Ideas for Improvement
 
 After making this initial model and reevaluting my methods, I compiled some thoughts to potentially improve this currently unusable model.
 
