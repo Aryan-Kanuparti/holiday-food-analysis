@@ -1,10 +1,9 @@
 
 # Holiday Food Analysis : Recipes and Rating Dataset
 
-
 ### Investigation on Holiday Foods Versus Non-Holiday Foods in Terms of Nutrition and Ratings
 
-Authors: Aryan Kanuparti
+Author: Aryan Kanuparti
 
 
 ## Introduction
@@ -108,7 +107,7 @@ Here are all the columns of the cleaned df.
 
 
 
-My cleaned dataframe ended with 234429 rows and 23 columns. Here are the first 5 rows of of the merged dataset ( there are some duplciated recipes due to the initial left merge and the fact that each recipe could potentially have multiple differnt reviews and ratings) Since there are a lot of columns for the merged dataframe, I selected the most relevant ones to display.
+My cleaned dataframe ended with 234429 rows and 23 columns. Here are the first 5 rows of of the merged dataset ( there are some duplicated recipes due to the initial left merge and the fact that each recipe could potentially have multiple differnt reviews and ratings) Since there are a lot of columns for the merged dataframe, I selected the most relevant ones to display.
 
 | name                                 |     id |   rating_avg |   calories (#) |   total_fat (PDV) |   sugar (PDV) | is_holiday_season   |
 |:-------------------------------------|-------:|-------------:|---------------:|------------------:|--------------:|:--------------------|
@@ -137,12 +136,9 @@ It appears that there are far more non-holiday recipes than holiday ones, which 
   frameborder="0"
 ></iframe>
 
-
-
 In looking at the shape of the sugar (PDV), it is skewed right with a fairly even log-scaled distribution which will be useful for training models in the future.
 
 ### Bivariate Analysis
-
 For the bivariate analysis, I wanted to study the relationship between sugar and fat becasue I believe that recipes with more of both of these are likely unhealthy and thus taste good enough to garner higher ratings.
 
 
@@ -154,9 +150,6 @@ For the bivariate analysis, I wanted to study the relationship between sugar and
 ></iframe>
 
 It appears that there isnt any strong noticable trend, other than most of the values being smaller rather than larger, with some relatively massive outliers for both sugar and fat
-
-
-
 Furthermore, to ties this back into the holiday food question, I wanted to determine some baseline information like the mean sugar (PDV) in holiday and non-holiday foods.
 
 <iframe
@@ -237,7 +230,6 @@ Outliers in cooking time posed a challenge for examining the distributions, but 
 ### Conclusion
 Since the p-value is greater than the threshold, we fail to reject the null hypothesis. This suggests that the missingness of ratings is not dependent on the cooking time of the recipe.
 
-
 ## Hypothesis Testing
 
 # Hypothesis Testing Report
@@ -271,34 +263,102 @@ We used the Kolmogorov-Smirnov test as it is a non-parametric method that compar
 
 ### Test for Ratings:
 - **K-S Test Statistic:** 0.0193  
-- **p-value:** \(1.72 \times 10^{-11}\)
+- **p-value:** (1.72 x 10^{-11})
 
 ### Test for Sugar Content:
 - **K-S Test Statistic:** 0.0254  
-- **p-value:** \(8.33 \times 10^{-20}\)
+- **p-value:** (8.33 x 10^{-20})
 
 ---
 
 ## Interpretation of Results
 
 1. **Ratings:**  
-   The p-value (\(1.72 \times 10^{-11}\)) is far below the significance level of 0.01. Therefore, we reject the null hypothesis and conclude that the distributions of ratings for holiday and non-holiday recipes are significantly different. One potential reason could be that holiday recipes are perceived as more celebratory or indulgent, leading to higher average ratings.
+   The p-value (1.72 x 10^{-11}) is far below the significance level of 0.01. Therefore, we reject the null hypothesis and conclude that the distributions of ratings for holiday and non-holiday recipes are significantly different. One potential reason could be that holiday recipes are perceived as more celebratory or indulgent, leading to higher average ratings.
 
 2. **Sugar Content:**  
-   The p-value (\(8.33 \times 10^{-20}\)) is also far below the significance level of 0.01. Hence, we reject the null hypothesis and conclude that the distributions of sugar content for holiday and non-holiday recipes are significantly different. This difference may arise because holiday recipes are often sweeter due to cultural traditions and seasonal preferences.
+   The p-value (8.33 x 10^{-20}) is also far below the significance level of 0.01. Hence, we reject the null hypothesis and conclude that the distributions of sugar content for holiday and non-holiday recipes are significantly different. This difference may arise because holiday recipes are often sweeter due to cultural traditions and seasonal preferences.
 
 ---
 
 ## Conclusion
 Our analysis demonstrates significant differences in both ratings and sugar content between holiday and non-holiday recipes. Holiday recipes tend to be rated differently, likely due to their cultural or celebratory context. Additionally, the higher sugar content in holiday recipes aligns with expectations of indulgence during festive periods. These findings suggest that seasonality has a meaningful impact on both the composition and reception of recipes.
 
-
-
-
 ## Framing a Prediction Problem
+
+# Predicting Average Rating of Recipes
+
+After conducting my initial exploratory data analysis (EDA) and running the above hypothesis tests, I would like to attempt to predict the average rating of recipes based on a number of features, with the most important being the **is_holiday_season** column. The response variable for this prediction is **rating_avg**, which is a scalar quantitative value ranging from 1 to 5.
+
+Since the **rating_avg** is a continuous numerical value, I have decided to use regression models rather than classification. This is because the average rating is not an ordinal categorical variable, and rounding it would limit its precision. Thus, I aim to predict the average rating as a real-valued number within the range [1, 5].
+
+To build the regression model, I will use the **is_holiday_season** column, which indicates whether the recipe was submitted during a holiday season, and **sugar (PDV)**, the sugar content of the recipe. These features are likely to have an impact on the recipe’s rating, and they provide valuable input for the model.
+
+To evaluate the performance of my regression models, I will use two metrics:
+- **RMSE (Root Mean Squared Error):** RMSE scales the error back to the target variable, which makes it easier to interpret. A lower RMSE indicates better predictive performance.
+- **R² (Coefficient of Determination):** The R² value represents the proportion of the variance in the target variable (avg_rating) that can be explained by the model. The closer the R² value is to 1, the better the model explains the variance in the data.
+
+Since I am predicting a continuous value, regression will be employed, and I will focus on how well the **is_holiday_season** and **sugar (PDV)** features help explain the variance in the **avg_rating** of recipes.
 
 
 ## Baseline Model
+
+# Baseline Model Report
+
+## Model Description
+
+In this initial model, I aimed to predict the average recipe rating (`rating_avg`) using two features: `is_holiday_season` and `sugar (PDV)`. Below is a breakdown of the features and how they were processed:
+
+### Features:
+1. **is_holiday_season**:
+   - Type: **Nominal (Categorical)**
+   - Encoding: This feature was one-hot encoded to convert the categorical values into binary variables (0 or 1), with the "first" category dropped to avoid multicollinearity.
+
+2. **sugar (PDV)**:
+   - Type: **Quantitative (Numerical)**
+   - Encoding: No encoding was necessary since this feature is already in a numerical format.
+
+### Data Preprocessing:
+- **Missing Value Handling**: For both the features and the target variable (`rating_avg`), missing values were handled using **mean imputation**. This strategy replaces missing values with the mean of the column.
+- **Feature Scaling**: No explicit scaling was performed on the numerical feature (`sugar (PDV)`), as linear regression models can generally handle unscaled features, but this is something to consider in future iterations.
+
+### Model:
+- **Model Type**: The model used was **Linear Regression**, a common method for predicting continuous values.
+- **Evaluation Metrics**: The model's performance was evaluated using several metrics:
+  - **Mean Squared Error (MSE)**: 0.241
+  - **Root Mean Squared Error (RMSE)**: 0.491
+  - **Mean Absolute Error (MAE)**: 0.339
+  - **R² Score**: 0.0003
+
+## Model Performance
+
+The R² score of approximately **0.0003** suggests that the model is not effectively predicting the target variable, `rating_avg`. In fact, it performs almost as poorly as predicting the mean of the target for all samples. The RMSE and MAE also indicate substantial error in the predictions.
+
+Given that the R² value is close to zero, it suggests that the current model barely performs better than a simple baseline model that predicts the average rating for every recipe. This indicates that the linear regression model, with its current features and preprocessing steps, is not capturing the underlying relationships between the features and the target variable effectively.
+
+## Ideas for Improvement
+
+After making this initial model and reevaluting my methods, I compiled some thoughts to potentially improve this currently unusable model.
+
+1. **Probabilistic Imputation**:
+   - **Current Limitation**: Mean imputation assumes that the data is missing completely at random (MCAR), which might not be the case.
+   - **Improvement**: I plan to explore **probabilistic imputation**, where missing values are imputed based on a probability distribution derived from observed data. This could result in more realistic imputations and improve model performance.
+
+2. **Inclusion of More Quantitative Features**:
+   - **Current Limitation**: The model currently uses only two features: `is_holiday_season` (which is categorical) and `sugar (PDV)` (which is quantitative).
+   - **Improvement**: I will consider including more quantitative features, such as `cooking_time` or `num_steps`, as these might provide additional predictive power. I will also explore the possibility of including interactions between features, which could improve the model’s ability to capture more complex relationships.
+
+3. **Alternative Regression Models**:
+   - **Current Limitation**: Linear regression may not be the best choice for this problem, especially given the poor performance observed.
+   - **Improvement**: I will experiment with other regression models, such as **Random Forest Regression** or **Gradient Boosting Machines** which may better capture the relationships between the features and target variable. These models can also handle more complex, non-linear patterns.
+
+4. **Feature Engineering**:
+   - **Improvement**: I will explore feature engineering techniques, such as creating new features or transforming existing ones, to improve the model's performance. For example, I could introduce interaction terms between features like sugar (PDV) and total_fat (PDV) which togather might be more correlated with rating_avg. 
+
+
+
+While the initial linear regression model offers a baseline, the poor performance (as indicated by the near-zero R² score) suggests that significant improvements are needed. The next steps will focus on improving the feature set, exploring better imputation techniques, and trying alternative regression models to enhance predictive accuracy. Given the current results, I do not consider this model to be "good," -- in fact it is really bad -- but I see clear paths for improvement.
+
 
 
 ## Final Model
