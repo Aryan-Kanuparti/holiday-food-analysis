@@ -166,21 +166,35 @@ Furthermore, to ties this back into the holiday food question, I wanted to deter
   frameborder="0"
 ></iframe>
 
-
-
+Based on the graph, I can see that holiday foods have marginally more sugar on average, which is a good sign for my initial hypothesis but requires further analysis.
 
 ### Interesting Aggregates
+For this section, I wanted to investigate similar relationships between the holiday status of foods and other aggreates like average rating and total_fat (PDV) / sugar (PDV)
 
+| is_holiday_season   | rating_avg mean | rating_avg median |
+|:--------------------|--------:|---------:|
+| False               | 4.67989 |  4.85714 |
+| True                | 4.66112 |  4.875   |
+
+
+| is_holiday_season   |   ('sugar (PDV)', 'mean') |   ('sugar (PDV)', 'median') |   ('total_fat (PDV)', 'mean') |   ('total_fat (PDV)', 'median') |
+|:--------------------|--------------------------:|----------------------------:|------------------------------:|--------------------------------:|
+| False               |                   62.6315 |                          22 |                       31.6395 |                              20 |
+| True                |                   69.3588 |                          24 |                       33.201  |                              20 |
+
+These pivot tables clearly highlight the marginal differnces between holiday and non-holiday food. It is interesting to note that the average rating of holiday foods is actually slightly lower then non-holiday foods, while the other nutritional variables follow the opposite trend.
 
 ## Assessment of Missingness
 
-Three columns, `'date'`, `'rating'`, and `'review'`, in the merged dataset have a significant amount of missing values, so we decided to assess the missingness on the dataframe.
+`'date'`, `'rating'`, and `'review'`, have a significant amount of missing values.
 
 ### NMAR Analysis
 
+Out of these three, I believe it to be most likely that the `'review'` column is NMAR. In other words the missigness of `'review'` column depends on the values or natures of the review themselves. The logic is that if people are apathetic about the recipe they are less likely to write out a review. If they really truly enjoyed the recipe they would take the time to write out a review, if not they might just click the rating and leave.
+
 
 ### Missingness Dependency
-
+For this section, I'll pick the `'rating'` columns as I beleive to have nontrivial missigness. Recall earlier that I replace all the ratings of 0 ( from a 1-5 scale) to null/missing values.
 
 ## Hypothesis Testing
 
